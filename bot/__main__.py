@@ -58,15 +58,18 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
     buttons.buildbutton("Channel", f"{CHANNEL_LINK}")
     buttons.buildbutton("Support Group", f"{SUPPORT_LINK}")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
-    LOGGER.info('UID: {} - UN: {} - MSG: {}'.format(update.message.chat.id, update.message.chat.username, update.message.text))
+    LOGGER.info(
+        f'UID: {update.message.chat.id} - UN: {update.message.chat.username} - MSG: {update.message.text}'
+    )
+
     uptime = get_readable_time((time.time() - botStartTime))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         if update.message.chat.type == "private" :
             sendMessage(f"Hey I'm Alive 🙂\nSince: <code>{uptime}</code>", context.bot, update)
         else :
             sendMarkup(start_string, context.bot, update, reply_markup)
-    else :
-        sendMessage(f"Oops! not a Authorized user.", context.bot, update)
+    else:
+        sendMessage("Oops! not a Authorized user.", context.bot, update)
 
 
 def restart(update, context):

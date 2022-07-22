@@ -13,7 +13,7 @@ def _watch(bot: Bot, update, isTar=False):
     mssg = update.message.text
     message_args = mssg.split(' ')
     name_args = mssg.split('|')
-    
+
     try:
         link = message_args[1]
     except IndexError:
@@ -24,7 +24,7 @@ def _watch(bot: Bot, update, isTar=False):
         msg += "This file will be downloaded in 720p quality and it's name will be <b>newname.extension</b>"
         sendMessage(msg, bot, update)
         return
-    
+
     try:
       if "|" in mssg:
         mssg = mssg.split("|")
@@ -37,12 +37,12 @@ def _watch(bot: Bot, update, isTar=False):
         qual = f'bestvideo[height<={qual}]+bestaudio/best[height<={qual}]'
     except IndexError:
       qual = "bestvideo+bestaudio/best"
-    
+
     try:
       name = name_args[1]
     except IndexError:
       name = ""
-    
+
     pswd = ""
     listener = MirrorListener(bot, update, pswd, isTar)
     ydl = YoutubeDLHelper(listener)

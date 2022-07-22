@@ -77,18 +77,13 @@ class TelegramDownloadHelper(DownloadHelper):
         )
         if download is not None:
             self.__onDownloadComplete()
-        else:
-            if not self.__is_cancelled:
-                self.__onDownloadError('Internal error occurred')
+        elif not self.__is_cancelled:
+            self.__onDownloadError('Internal error occurred')
 
     def add_download(self, message, path, filename):
         _message = self._bot.get_messages(message.chat.id, reply_to_message_ids=message.message_id)
-        media = None
         media_array = [_message.document, _message.video, _message.audio]
-        for i in media_array:
-            if i is not None:
-                media = i
-                break
+        media = next((i for i in media_array if i is not None), None)
         if media is not None:
             with global_lock:
                 # For avoiding locking the thread lock for long time unnecessarily
@@ -98,12 +93,12 @@ class TelegramDownloadHelper(DownloadHelper):
             else:
                 name = filename
                 path = path + name
-            
+
             if download:
                 if STOP_DUPLICATE:
-                    LOGGER.info(f"Checking File/Folder if already in Drive...")
+                    LOGGER.info("Checking File/Folder if already in Drive...")
                     if self.__listener.isTar:
-                        name = name + ".tar"
+                        name = f"{name}.tar"
                     if self.__listener.extract:           
                         smsg = None
                     else:
